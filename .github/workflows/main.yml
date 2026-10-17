@@ -1,0 +1,26 @@
+﻿name: .NET CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  ci:
+    uses: StangaNet/.github/.github/workflows/dotnet-lib.yml@main
+    with:
+      library-name: 'StangaNetLib.Storage'
+      artifact-name: 'stanganetlib-storage-nuget'
+      needs-github-packages-source: true
+      publish: ${{ github.event_name != 'pull_request' }}
+    secrets: inherit
