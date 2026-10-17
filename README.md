@@ -28,7 +28,7 @@ The package is hosted on **GitHub Packages** (pulls Resilience / Core from the s
 
 ```xml
 <!-- .csproj -->
-<PackageReference Include="StangaNetLib.Storage" Version="1.0.0" />
+<PackageReference Include="StangaNetLib.Storage" Version="1.0.1" />
 ```
 
 See [CHANGELOG.md](./CHANGELOG.md) for release history.

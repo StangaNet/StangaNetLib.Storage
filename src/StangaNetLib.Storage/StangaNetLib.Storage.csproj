@@ -3,7 +3,7 @@
     <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
     <AssemblyName>StangaNetLib.Storage</AssemblyName>
     <RootNamespace>StangaNetLib.Storage</RootNamespace>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Description>Unified blob storage abstraction for S3, Azure Blob, and local filesystem with streaming, pre-signed URLs, and object lifecycle management. Depends on StangaNetLib.Resilience and StangaNetLib.Core.</Description>
     <PackageTags>storage;blob;s3;azure;filesystem;stanganet</PackageTags>
   </PropertyGroup>

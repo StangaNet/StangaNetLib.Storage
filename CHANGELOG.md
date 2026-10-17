@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-10-18
+
+### Fixed
+- Republish with Microsoft.Extensions.* 8.x and Azure.Storage.Blobs 12.22.2 dependency graph. GitHub Packages retained a prior `1.0.0` nuspec that pulled ME 10.x / Blobs 12.29.x / Resilience 1.0.1, causing NU1605 downgrades in consumers (e.g. Media).
+
 ## [1.0.0] - 2026-10-17
 
 ### Added
@@ -18,5 +23,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Depends on `StangaNetLib.Resilience` 1.0.0 (brings `StangaNetLib.Core`); Microsoft.Extensions.* pinned to 8.x.
 - CI via shared StangaNet reusable workflow (push / PR / manual; publish outside PRs).
 
-[Unreleased]: https://github.com/StangaNet/StangaNetLib.Storage/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/StangaNet/StangaNetLib.Storage/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/StangaNet/StangaNetLib.Storage/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/StangaNet/StangaNetLib.Storage/releases/tag/v1.0.0
