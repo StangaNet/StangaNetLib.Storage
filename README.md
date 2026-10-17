@@ -4,24 +4,24 @@
 ![NuGet](https://img.shields.io/badge/nuget-1.0.0-blue)
 ![.NET](https://img.shields.io/badge/.NET-8.0%20%7C%209.0-512BD4)
 
-StangaNetLib.Storage is a unified blob storage abstraction for .NET with Local filesystem, AWS S3, and Azure Blob providers. It supports streaming upload/download, pre-signed URLs, container lifecycle, and optional resilience via `StangaNetLib.Resilience`. All operations return `Result` / `Result<T>` from `StangaNetLib.Core`.
+Unified blob storage abstraction for Local filesystem, AWS S3 (and S3-compatible), and Azure Blob. Supports streaming upload/download, pre-signed URLs, container lifecycle, and optional resilience via [`StangaNetLib.Resilience`](https://github.com/StangaNet/StangaNetLib.Resilience). Operations return `Result` / `Result<T>` from [`StangaNetLib.Core`](https://github.com/StangaNet/StangaNetLib.Core).
 
 ## Design Philosophy
 
-- **Domain-Centric**: Storage concerns organized by capability (blob operations, pre-signed URLs, containers) rather than provider internals.
-- **Functional Error Handling**: All I/O surfaces use `Result` / `Result<T>` from `StangaNetLib.Core`.
-- **Defensive Programming**: Uses `Guard.Against` from Core for input validation.
-- **Modern Standards**: Optimized for .NET 8.0 and 9.0 with optional Polly-based resilience pipelines.
+- **Domain-centric**: blob ops, pre-signed URLs, and containers as capabilities.
+- **Functional failures**: expected outcomes map to `Result` / `Result<T>`.
+- **Pluggable backends**: Local, S3, Azure Blob behind the same contracts.
+- **Modern .NET**: `net8.0` / `net9.0` with optional Polly-based resilience.
 
 ## Installation
 
-The package is hosted on **GitHub Packages**.
+The package is hosted on **GitHub Packages** (pulls Resilience / Core from the same feed).
 
 ```xml
-<!-- NuGet.config — add the GitHub Packages source -->
+<!-- NuGet.config — source key must match your packageSourceCredentials -->
 <configuration>
   <packageSources>
-    <add key="github" value="https://nuget.pkg.github.com/StangaNet/index.json" />
+    <add key="StangaNet" value="https://nuget.pkg.github.com/StangaNet/index.json" />
   </packageSources>
 </configuration>
 ```
@@ -31,78 +31,58 @@ The package is hosted on **GitHub Packages**.
 <PackageReference Include="StangaNetLib.Storage" Version="1.0.0" />
 ```
 
-**Dependencies**: `StangaNetLib.Core`, `StangaNetLib.Resilience` (optional at runtime), `AWSSDK.S3`, `Azure.Storage.Blobs`, `Microsoft.Extensions.Options*`.
-
----
+See [CHANGELOG.md](./CHANGELOG.md) for release history.
 
 ## Core Components
 
-*The library is organized into functional namespaces. For implementation details, refer directly to the source code.*
-
-| Namespace | Core Components | Purpose |
-| :--- | :--- | :--- |
-| `StangaNetLib.Storage.Abstractions` | `IBlobStorageService`, `IPresignedUrlService`, `IContainerManager` | Public contracts. |
-| `StangaNetLib.Storage.Models` | `BlobUploadResult`, `BlobDownloadResult`, `BlobMetadata`, `BlobItem`, `PresignedUrl` | Domain models. |
-| `StangaNetLib.Storage.Settings` | `StorageSettings`, `S3StorageSettings`, `AzureBlobStorageSettings` | Configuration. |
-| `StangaNetLib.Storage.Implementations.Local` | `LocalStorageProvider` | Filesystem provider (dev/test). |
-| `StangaNetLib.Storage.Implementations.S3` | `S3StorageProvider` | AWS S3 / S3-compatible. |
-| `StangaNetLib.Storage.Implementations.AzureBlob` | `AzureBlobStorageProvider` | Azure Blob Storage. |
-| `StangaNetLib.Storage.Extensions` | `ServiceCollectionExtensions` | DI registration. |
-
----
+| Namespace | Components | Purpose |
+|---|---|---|
+| `StangaNetLib.Storage.Abstractions` | `IBlobStorageService`, `IPresignedUrlService`, `IContainerManager` | Public contracts |
+| `StangaNetLib.Storage.Models` | `BlobUploadResult`, `BlobDownloadResult`, `BlobMetadata`, … | Domain models |
+| `StangaNetLib.Storage.Settings` | `StorageSettings`, `S3StorageSettings`, `AzureBlobStorageSettings` | Configuration |
+| `StangaNetLib.Storage.Implementations.*` | Local / S3 / AzureBlob | Providers |
+| `StangaNetLib.Storage.Extensions` | `AddStangaNetLibStorage`, `AddStangaNetLibStorageLocal` | DI |
 
 ## Project Structure
 
 ```
 StangaNetLib.Storage/
+├── assets/
+│   └── package-icon.png
+├── build/
+│   └── StangaNetLib.Storage.props
 ├── src/
 │   └── StangaNetLib.Storage/
-│       ├── Abstractions/       # Public interfaces
-│       ├── Extensions/         # DI registration
-│       ├── Implementations/    # Local, S3, AzureBlob
-│       ├── Models/             # Upload/download results, metadata
-│       └── Settings/           # Configuration models
+│       ├── Abstractions/
+│       ├── Extensions/
+│       ├── Implementations/
+│       ├── Models/
+│       └── Settings/
 └── tests/
     └── StangaNetLib.Storage.Tests/
 ```
 
----
-
 ## Quick Start
-
-### Local (development)
 
 ```csharp
 builder.Services.AddStangaNetLibStorageLocal(basePath: "wwwroot/storage");
+// or: builder.Services.AddStangaNetLibStorage(builder.Configuration);
+// optional: builder.Services.AddStangaNetLibResilience(...) for pipeline "Storage"
 ```
-
-### From configuration
-
-```json
-{
-  "StorageSettings": {
-    "Provider": "Local",
-    "LocalBasePath": "wwwroot/storage",
-    "LocalBaseUrl": "https://myapp.com/storage"
-  }
-}
-```
-
-```csharp
-builder.Services.AddStangaNetLibStorage(builder.Configuration);
-// Optional: builder.Services.AddStangaNetLibResilience(...) for pipeline "Storage"
-```
-
-### Upload example
 
 ```csharp
 public class MediaService(IBlobStorageService storage)
 {
-    public async Task<Result<BlobUploadResult>> SaveAsync(Stream stream, string key, CancellationToken ct)
-        => await storage.UploadAsync("media", key, stream, "image/jpeg", ct: ct);
+    public Task<Result<BlobUploadResult>> SaveAsync(Stream stream, string key, CancellationToken ct)
+        => storage.UploadAsync("media", key, stream, "image/jpeg", ct: ct);
 }
 ```
 
-## About
+## CI/CD
 
-Unified blob storage abstraction for S3, Azure Blob, and local filesystem with streaming, pre-signed URLs, and object lifecycle management.
+On push/PR to `main` and `workflow_dispatch`, the shared StangaNet workflow:
+
+1. Restores, builds, and tests on .NET 8 and .NET 9
+2. Packs the NuGet package (with symbols)
+3. Publishes to GitHub Packages outside pull requests
+4. Uploads the `.nupkg` as a build artifact
