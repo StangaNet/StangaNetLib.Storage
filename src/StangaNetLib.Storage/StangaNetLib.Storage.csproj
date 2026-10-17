@@ -3,13 +3,19 @@
     <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
     <AssemblyName>StangaNetLib.Storage</AssemblyName>
     <RootNamespace>StangaNetLib.Storage</RootNamespace>
-    <Description>Unified blob storage abstraction for S3, Azure Blob, and local filesystem with streaming, pre-signed URLs, and object lifecycle management.</Description>
-    <PackageTags>storage;blob;s3;azure;filesystem;stanganet</PackageTags>
     <Version>1.0.0</Version>
+    <Description>Unified blob storage abstraction for S3, Azure Blob, and local filesystem with streaming, pre-signed URLs, and object lifecycle management. Depends on StangaNetLib.Resilience and StangaNetLib.Core.</Description>
+    <PackageTags>storage;blob;s3;azure;filesystem;stanganet</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="StangaNetLib.Storage.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="StangaNetLib.Resilience" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.Options" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
@@ -19,10 +25,34 @@
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="StangaNetLib.Storage.Tests" />
+    <None Include="..\..\build\**" Pack="true" PackagePath="build/" />
   </ItemGroup>
+
+  <Target Name="StampBuildProps" BeforeTargets="GenerateNuspec">
+    <PropertyGroup>
+      <_BuildPropsFile>$(MSBuildThisFileDirectory)..\..\build\StangaNetLib.Storage.props</_BuildPropsFile>
+    </PropertyGroup>
+    <ItemGroup>
+      <_BPLines Include="&lt;Project&gt;" />
+      <_BPLines Include="  &lt;ItemGroup&gt;" />
+      <_BPLines Include="    &lt;AssemblyAttribute Include=&quot;System.Reflection.AssemblyMetadataAttribute&quot;&gt;" />
+      <_BPLines Include="      &lt;_Parameter1&gt;StangaNetLib.Storage&lt;/_Parameter1&gt;" />
+      <_BPLines Include="      &lt;_Parameter2&gt;$(Version)&lt;/_Parameter2&gt;" />
+      <_BPLines Include="    &lt;/AssemblyAttribute&gt;" />
+      <_BPLines Include="  &lt;/ItemGroup&gt;" />
+      <_BPLines Include="&lt;/Project&gt;" />
+    </ItemGroup>
+    <WriteLinesToFile
+      File="$(_BuildPropsFile)"
+      Lines="@(_BPLines)"
+      Overwrite="true"
+      Encoding="UTF-8" />
+    <Message Text="StangaNetLib.Storage: stamped build props with version $(Version)" Importance="high" />
+  </Target>
 
   <ItemGroup>
     <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\assets\package-icon.png" Pack="true" PackagePath="\" />
+    <None Include="..\..\CHANGELOG.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 </Project>
