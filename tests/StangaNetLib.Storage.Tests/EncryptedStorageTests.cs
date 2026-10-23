@@ -39,10 +39,12 @@ public sealed class EncryptedStorageTests
             using var reader = new StreamReader(down.Value.Content);
             (await reader.ReadToEndAsync(ct)).Should().Be("hello encrypted storage");
 
-            // On-disk payload must not be plaintext
-            var files = Directory.GetFiles(dir, "*", SearchOption.AllDirectories);
-            files.Should().NotBeEmpty();
-            var raw = await File.ReadAllBytesAsync(files[0], ct);
+            // On-disk payload must not be plaintext (skip .storagemeta sidecars)
+            var blobFiles = Directory.GetFiles(dir, "*", SearchOption.AllDirectories)
+                .Where(f => !f.EndsWith(".storagemeta", StringComparison.OrdinalIgnoreCase))
+                .ToArray();
+            blobFiles.Should().NotBeEmpty();
+            var raw = await File.ReadAllBytesAsync(blobFiles[0], ct);
             Encoding.UTF8.GetString(raw).Should().NotContain("hello encrypted storage");
             raw.AsSpan(0, 4).ToArray().Should().Equal("SNEN"u8.ToArray());
         }
