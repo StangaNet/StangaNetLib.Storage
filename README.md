@@ -2,7 +2,7 @@
 
 [![.NET CI](https://github.com/StangaNet/StangaNetLib.Storage/actions/workflows/main.yml/badge.svg)](https://github.com/StangaNet/StangaNetLib.Storage/actions/workflows/main.yml)
 ![NuGet](https://img.shields.io/badge/nuget-1.0.0-blue)
-![.NET](https://img.shields.io/badge/.NET-8.0%20%7C%209.0-512BD4)
+![.NET](https://img.shields.io/badge/.NET-8.0%20%7C%209.0%20%7C%2010.0-512BD4)
 
 Unified blob storage abstraction for Local filesystem, AWS S3 (and S3-compatible), and Azure Blob. Supports streaming upload/download, pre-signed URLs, container lifecycle, and optional resilience via [`StangaNetLib.Resilience`](https://github.com/StangaNet/StangaNetLib.Resilience). Operations return `Result` / `Result<T>` from [`StangaNetLib.Core`](https://github.com/StangaNet/StangaNetLib.Core).
 
@@ -11,7 +11,7 @@ Unified blob storage abstraction for Local filesystem, AWS S3 (and S3-compatible
 - **Domain-centric**: blob ops, pre-signed URLs, and containers as capabilities.
 - **Functional failures**: expected outcomes map to `Result` / `Result<T>`.
 - **Pluggable backends**: Local, S3, Azure Blob behind the same contracts.
-- **Modern .NET**: `net8.0` / `net9.0` with optional Polly-based resilience.
+- **Modern .NET**: `net8.0` / `net9.0` / `net10.0` with optional Polly-based resilience.
 
 ## Installation
 

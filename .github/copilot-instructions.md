@@ -6,4 +6,4 @@
 - DI entry points are `AddStangaNetLibStorage` and `AddStangaNetLibStorageLocal` in `StangaNetLib.Storage.Extensions`.
 - Optional: inject `IResilientExecutor` from `StangaNetLib.Resilience` for the `"Storage"` pipeline on S3/Azure providers.
 - Match existing naming, file-scoped namespaces, and EditorConfig / Roslyn conventions.
-- Tests use xUnit v3 + FluentAssertions; cover both `net8.0` and `net9.0` when changing shared behavior.
+- Tests use xUnit v3 + FluentAssertions; cover `net8.0`, `net9.0`, and `net10.0` when changing shared behavior.
