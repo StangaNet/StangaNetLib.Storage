@@ -1,16 +1,17 @@
 # StangaNetLib.Storage
 
 [![.NET CI](https://github.com/StangaNet/StangaNetLib.Storage/actions/workflows/main.yml/badge.svg)](https://github.com/StangaNet/StangaNetLib.Storage/actions/workflows/main.yml)
-![NuGet](https://img.shields.io/badge/nuget-1.0.2-blue)
+![NuGet](https://img.shields.io/badge/nuget-1.1.0-blue)
 ![.NET](https://img.shields.io/badge/.NET-8.0%20%7C%209.0%20%7C%2010.0-512BD4)
 
-Unified blob storage abstraction for Local filesystem, AWS S3 (and S3-compatible), and Azure Blob. Supports streaming upload/download, pre-signed URLs, container lifecycle, and optional resilience via [`StangaNetLib.Resilience`](https://github.com/StangaNet/StangaNetLib.Resilience). Operations return `Result` / `Result<T>` from [`StangaNetLib.Core`](https://github.com/StangaNet/StangaNetLib.Core).
+Unified blob storage abstraction for **Local filesystem** (supported local-only / self-hosted profile), AWS S3 (and S3-compatible), and Azure Blob. Supports streaming upload/download, optional at-rest encryption via [`StangaNetLib.Cryptography`](https://github.com/StangaNet/StangaNetLib.Cryptography), pre-signed URLs, container lifecycle, and optional resilience via [`StangaNetLib.Resilience`](https://github.com/StangaNet/StangaNetLib.Resilience). Operations return `Result` / `Result<T>` from [`StangaNetLib.Core`](https://github.com/StangaNet/StangaNetLib.Core). Cloud backends are opt-in; Local is the default and a first-class production profile.
 
 ## Design Philosophy
 
+- **Local-first**: `AddStangaNetLibStorageLocalOnly` for self-hosted deployments without cloud.
 - **Domain-centric**: blob ops, pre-signed URLs, and containers as capabilities.
 - **Functional failures**: expected outcomes map to `Result` / `Result<T>`.
-- **Pluggable backends**: Local, S3, Azure Blob behind the same contracts.
+- **Pluggable backends**: Local, S3, Azure Blob behind the same contracts; optional encrypt-at-rest decorator.
 - **Modern .NET**: `net8.0` / `net9.0` / `net10.0` with optional Polly-based resilience.
 
 ## Installation
@@ -41,7 +42,7 @@ See [CHANGELOG.md](./CHANGELOG.md) for release history.
 | `StangaNetLib.Storage.Models` | `BlobUploadResult`, `BlobDownloadResult`, `BlobMetadata`, … | Domain models |
 | `StangaNetLib.Storage.Settings` | `StorageSettings`, `S3StorageSettings`, `AzureBlobStorageSettings` | Configuration |
 | `StangaNetLib.Storage.Implementations.*` | Local / S3 / AzureBlob | Providers |
-| `StangaNetLib.Storage.Extensions` | `AddStangaNetLibStorage`, `AddStangaNetLibStorageLocal` | DI |
+| `StangaNetLib.Storage.Extensions` | `AddStangaNetLibStorage`, `AddStangaNetLibStorageLocal`, `AddStangaNetLibStorageLocalOnly` | DI |
 
 ## Project Structure
 

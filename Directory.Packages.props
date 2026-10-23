@@ -6,6 +6,7 @@
     <!-- StangaNetLib foundation -->
     <PackageVersion Include="StangaNetLib.Core" Version="1.0.0" />
     <PackageVersion Include="StangaNetLib.Resilience" Version="1.0.0" />
+    <PackageVersion Include="StangaNetLib.Cryptography" Version="1.1.0" />
     <!-- Cloud storage -->
     <PackageVersion Include="AWSSDK.S3" Version="4.0.103.3" />
     <PackageVersion Include="Azure.Storage.Blobs" Version="12.22.2" />

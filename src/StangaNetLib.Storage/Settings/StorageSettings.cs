@@ -23,12 +23,15 @@ public sealed class StorageSettings
     /// Default: <c>""</c> — pre-signed URL generation is disabled until this is set.
     /// </summary>
     public string LocalBaseUrl { get; set; } = string.Empty;
+
+    /// <summary>Optional at-rest encryption settings (Cryptography integration).</summary>
+    public StorageEncryptionSettings Encryption { get; set; } = new();
 }
 
 /// <summary>Identifies the storage backend to register.</summary>
 public enum StorageProvider
 {
-    /// <summary>Local filesystem — development and testing only.</summary>
+    /// <summary>Local filesystem — supported local-only / self-hosted production profile.</summary>
     Local = 0,
 
     /// <summary>AWS S3 (or S3-compatible, e.g. MinIO / LocalStack).</summary>

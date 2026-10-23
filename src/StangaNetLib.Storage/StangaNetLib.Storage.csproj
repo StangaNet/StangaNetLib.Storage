@@ -3,9 +3,9 @@
     <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
     <AssemblyName>StangaNetLib.Storage</AssemblyName>
     <RootNamespace>StangaNetLib.Storage</RootNamespace>
-    <Version>1.0.2</Version>
-    <Description>Unified blob storage abstraction for S3, Azure Blob, and local filesystem with streaming, pre-signed URLs, and object lifecycle management. Depends on StangaNetLib.Resilience and StangaNetLib.Core.</Description>
-    <PackageTags>storage;blob;s3;azure;filesystem;stanganet</PackageTags>
+    <Version>1.1.0</Version>
+    <Description>Unified blob storage abstraction for local filesystem (local-only profile), S3, and Azure Blob with optional at-rest encryption via Cryptography, streaming, pre-signed URLs, and object lifecycle management.</Description>
+    <PackageTags>storage;blob;s3;azure;filesystem;encryption;local-only;stanganet</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="StangaNetLib.Resilience" />
+    <PackageReference Include="StangaNetLib.Cryptography" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />

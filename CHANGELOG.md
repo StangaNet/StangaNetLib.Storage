@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [1.1.0] - 2026-10-23
+
+### Added
+- Local-only profile helper `AddStangaNetLibStorageLocalOnly` (production-oriented Local backend).
+- Optional at-rest encryption via `StorageSettings.Encryption` / `EncryptedBlobStorageService` (requires `StangaNetLib.Cryptography` `IAtRestEncryptionService`).
+
+### Changed
+- Document Local provider as a supported local-only / self-hosted profile (not “dev only”).
+
 ## [1.0.2] - 2026-10-23
 
 ### Changed
@@ -30,7 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Depends on `StangaNetLib.Resilience` 1.0.0 (brings `StangaNetLib.Core`); Microsoft.Extensions.* pinned to 8.x.
 - CI via shared StangaNet reusable workflow (push / PR / manual; publish outside PRs).
 
-[Unreleased]: https://github.com/StangaNet/StangaNetLib.Storage/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/StangaNet/StangaNetLib.Storage/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/StangaNet/StangaNetLib.Storage/compare/v1.0.2...v1.1.0
 [1.0.2]: https://github.com/StangaNet/StangaNetLib.Storage/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/StangaNet/StangaNetLib.Storage/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/StangaNet/StangaNetLib.Storage/releases/tag/v1.0.0
